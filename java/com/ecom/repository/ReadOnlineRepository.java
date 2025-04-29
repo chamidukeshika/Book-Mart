@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.ecom.model.ReadOnline;
 
 public interface ReadOnlineRepository extends JpaRepository<ReadOnline, Integer> {
-	Page<ReadOnline> findByCategoryContainingIgnoreCase(String category, Pageable pageable);
+	Page<ReadOnline> findByCategoryContainingIgnoreCase(String categoryKeyword, Pageable pageable);
 
 	Page<ReadOnline> findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String title, String description,
 			Pageable pageable);
