@@ -275,5 +275,62 @@ public class HomeController {
 		return "product";
 	}
 
+
+    
+	@Autowired
+	private ReadOnlineService readOnlineService;
+
+	@GetMapping("/reading")
+	public String readingSection(Model model, @RequestParam(defaultValue = "") String category,
+			@RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "5") int pageSize,
+			@RequestParam(defaultValue = "") String query) {
+
+		Page<ReadOnline> page;
+		if (!query.isEmpty()) {
+			page = readOnlineService.searchDocuments(query, pageNo, pageSize);
+		} else {
+			page = readOnlineService.getAllDocuments(category, pageNo, pageSize);
+		}
+
+		model.addAttribute("documents", page.getContent());
+		model.addAttribute("categories", categoryService.getAllActiveCategory());
+		model.addAttribute("currentPage", pageNo);
+		model.addAttribute("totalPages", page.getTotalPages());
+		model.addAttribute("category", category);
+		model.addAttribute("query", query);
+
+		return "read_online";
+	}
+
+	// Update PDF serving
+	@GetMapping("/pdf/{fileName:.+}")
+	public ResponseEntity<Resource> viewPdf(@PathVariable String fileName) throws IOException {
+		// Decode filename from URL encoding
+		String decodedFileName = URLDecoder.decode(fileName, StandardCharsets.UTF_8.toString());
+
+		File file = new File("uploads/pdf/" + decodedFileName);
+
+		if (!file.exists()) {
+			return ResponseEntity.notFound().build();
+		}
+
+		Path path = file.toPath();
+		Resource resource = new UrlResource(path.toUri());
+
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF)
+				.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + decodedFileName + "\"").body(resource);
+	}
+
+	// Add cover image serving
+	@GetMapping("/cover-image/{fileName}")
+	public ResponseEntity<Resource> viewCoverImage(@PathVariable String fileName) throws IOException {
+		File file = new File("uploads/cover_images/" + fileName);
+		Path path = Paths.get(file.getAbsolutePath());
+		Resource resource = new UrlResource(path.toUri());
+
+		String contentType = Files.probeContentType(path);
+		return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType)).body(resource);
+	}
+
   
 }
