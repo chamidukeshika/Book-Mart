@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-BookMartSiteApplication<Book_Mart_Site>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.ecom.BookMartSiteApplication",
+            "projectName": "Book_Mart_Site",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
