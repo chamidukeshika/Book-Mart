@@ -27,7 +27,9 @@ public class ReadOnline {
 	@Column(length = 5000)
 	private String description;
 
+	@Column(length = 255)
 	private String category;
+	
 
 	private String file;
 
