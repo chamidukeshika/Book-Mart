@@ -156,5 +156,124 @@ public class HomeController {
 		m.addAttribute("product", productById);
 		return "view_product";
 	}
+
+    
+	@PostMapping("/saveUser")
+	public String saveUser(@ModelAttribute UserDtls user, @RequestParam("img") MultipartFile file, HttpSession session)
+			throws IOException {
+
+		Boolean existsEmail = userService.existsEmail(user.getEmail());
+
+		if (existsEmail) {
+			session.setAttribute("errorMsg", "Email already exist");
+		} else {
+			String imageName = file.isEmpty() ? "default.jpg" : file.getOriginalFilename();
+			user.setProfileImage(imageName);
+			UserDtls saveUser = userService.saveUser(user);
+
+			if (!ObjectUtils.isEmpty(saveUser)) {
+				if (!file.isEmpty()) {
+					File saveFile = new ClassPathResource("static/img").getFile();
+
+					Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + "profile_img" + File.separator
+							+ file.getOriginalFilename());
+
+//					System.out.println(path);
+					Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+				}
+				session.setAttribute("succMsg", "Register successfully");
+			} else {
+				session.setAttribute("errorMsg", "something wrong on server");
+			}
+		}
+
+		return "redirect:/register";
+	}
+
+	// forgot password
+	@GetMapping("/forgot-password")
+	public String showForgotPassword() {
+		return "forgot_password";
+	}
+
+	@PostMapping("/forgot-password")
+	public String processForgotPassword(@RequestParam String email, HttpSession session, HttpServletRequest request)
+			throws UnsupportedEncodingException, MessagingException {
+
+		UserDtls userByEmail = userService.getUserByEmail(email);
+
+		if (ObjectUtils.isEmpty(userByEmail)) {
+
+			session.setAttribute("errorMsg", "Invalid Email !!");
+		} else {
+			String recieverName = userByEmail.getName();
+			String resetToken = UUID.randomUUID().toString();
+			userService.updateUserResetToken(email, resetToken);
+
+			// generate url
+			// =http://localhost:8080/reset-password?token=fjdbgibgigoegnfsounos
+
+			String url = CommonUtil.generateUrl(request) + "/reset-password?token=" + resetToken;
+
+			Boolean sendMail = commonUtil.sendMail(url, email, recieverName);
+
+			if (sendMail) {
+				session.setAttribute("succMsg", "Password Reset Link has been sent");
+			} else {
+				session.setAttribute("errorMsg", "Somethiing went wrong on server | Email not send");
+			}
+		}
+
+		return "redirect:/forgot-password";
+	}
+
+	@GetMapping("/reset-password")
+	public String showResetPassword(@RequestParam String token, HttpSession session, Model m) {
+
+		UserDtls userByToken = userService.getUserByToken(token);
+
+		if (userByToken == null) {
+			m.addAttribute("msg", "Your Link is Invalid or Expired !!");
+			return "message";
+		}
+		m.addAttribute("token", token);
+		return "reset_password";
+	}
+
+	@PostMapping("/reset-password")
+	public String resetPassword(@RequestParam String token, @RequestParam String password,
+			@RequestParam String confirmPassword, HttpServletRequest request, HttpSession session, Model m) {
+		// Validate passwords match
+		if (!password.equals(confirmPassword)) {
+			session.setAttribute("errorMsg", "The passwords entered do not match. Please try again!!");
+			return "redirect:/reset-password?token=" + token; // Redirect back to the reset password page with the token
+		}
+
+		UserDtls userByToken = userService.getUserByToken(token);
+
+		if (userByToken == null) {
+			m.addAttribute("msg", "Your link is invalid or expired!");
+			return "message";
+		} else {
+			userByToken.setPassword(passwordEncoder.encode(password));
+			userByToken.setResetToken(null);
+			userService.updateUser(userByToken);
+			m.addAttribute("msg", "Password changed successfully!");
+			return "message";
+		}
+	}
+
+	// search product
+	@GetMapping("/search")
+	public String searchProduct(@RequestParam String ch, Model m) {
+		List<Product> searchProduct = productService.searchProduct(ch);
+		m.addAttribute("products", searchProduct);
+
+		// category loading
+		List<Category> categories = categoryService.getAllActiveCategory();
+		m.addAttribute("categories", categories);
+		return "product";
+	}
+
   
 }
