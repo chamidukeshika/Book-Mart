@@ -105,4 +105,55 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 
+	
+	@Override
+	public List<ProductOrder> getOrdersByUser(Integer userId) {
+
+		List<ProductOrder> orders = orderRepository.findByUserId(userId);
+
+		return orders;
+	}
+
+	@Override
+	public ProductOrder updateOrderStatus(Integer id, String status) {
+
+		Optional<ProductOrder> findByid = orderRepository.findById(id);
+
+		if (findByid.isPresent()) {
+
+			ProductOrder productOrders = findByid.get();
+			productOrders.setStatus(status);
+			ProductOrder updateOrder = orderRepository.save(productOrders);
+			return updateOrder;
+
+		}
+
+		return null;
+	}
+
+	@Override
+	public List<ProductOrder> getAllOrders() {
+
+		return orderRepository.findAll();
+	}
+
+	@Override
+	public ProductOrder getOrderByOrderId(String orderId) {
+
+		return orderRepository.findByOrderId(orderId);
+	}
+
+	@Override
+	public Page<ProductOrder> getAllOrdersPagination(Integer pageNo, Integer pageSize) {
+
+		Pageable pageable = PageRequest.of(pageNo, pageSize);
+
+		return orderRepository.findAll(pageable);
+	}
+
+	@Override
+	public Page<ProductOrder> getAllOrdersPagination(Pageable pageable) {
+		return orderRepository.findAll(pageable);
+	}
+
 }
