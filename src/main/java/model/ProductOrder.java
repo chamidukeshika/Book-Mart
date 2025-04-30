@@ -30,13 +30,6 @@ public class ProductOrder {
 	private Date orderDate;
 
 	@ManyToOne
-	private Product product;
-
-	private Integer quantity;
-
-	private Double price;
-
-	@ManyToOne
 	private UserDtls user;
 
 	private String status;
@@ -45,4 +38,13 @@ public class ProductOrder {
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private OrderAddress orderAddress;
+
+	@ManyToOne
+	private Product product;
+
+	private Integer quantity;
+
+	private Double price;
+
+	
 }
