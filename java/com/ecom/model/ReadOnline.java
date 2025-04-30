@@ -33,5 +33,6 @@ public class ReadOnline {
 	@Column(length = 255)
 	private String file;
 
+	@Column(length = 255)
 	private String coverImage;
 }
