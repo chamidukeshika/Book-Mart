@@ -126,8 +126,8 @@ public class HomeController {
 		m.addAttribute("paramValue", category);
 		m.addAttribute("categories", categories);
 
-//		List<Product> products = productService.getAllActiveProducts(category);
-//		m.addAttribute("products", products);
+		// List<Product> products = productService.getAllActiveProducts(category);
+		// m.addAttribute("products", products);
 		Page<Product> page = null;
 		if (StringUtils.isEmpty(ch)) {
 			page = productService.getAllActiveProductPagination(pageNo, pageSize, category);
@@ -177,7 +177,7 @@ public class HomeController {
 					Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + "profile_img" + File.separator
 							+ file.getOriginalFilename());
 
-//					System.out.println(path);
+					// System.out.println(path);
 					Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 				}
 				session.setAttribute("succMsg", "Register successfully");
