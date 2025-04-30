@@ -150,11 +150,13 @@ public class HomeController {
 	}
 
 	@GetMapping("/product/{id}")
+
 	public String product(@PathVariable int id, Model m) {
 
 		Product productById = productService.getProductById(id);
 		m.addAttribute("product", productById);
 		return "view_product";
+		
 	}
 
     
