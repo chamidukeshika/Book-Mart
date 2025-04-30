@@ -1,0 +1,26 @@
+@charset "UTF-8";
+
+.card-sh {
+	box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.3);
+}
+
+.cat-div {
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar {
+	transition: background-color 0.3s ease-in-out;
+}
+
+.navbar-scrolled {
+	background-color: rgba(255, 255, 255, 0.9);;
+	/* Your desired scroll color */
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional shadow */
+}
+
+.error{
+	color:red;
+}
+
+
+
