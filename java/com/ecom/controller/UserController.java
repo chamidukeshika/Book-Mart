@@ -54,6 +54,7 @@ public class UserController {
 	@GetMapping("/")
 	public String home() {
 		return "user/home";
+		
 	}
 
 	@ModelAttribute
