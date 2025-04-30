@@ -12,7 +12,7 @@ public interface ReadOnlineService {
 
 	Page<ReadOnline> getAllDocuments(String category, int pageNo, int pageSize);
 
-	Page<ReadOnline> searchDocuments(String query, int pageNo, int pageSize);
+	Page<ReadOnline> searchDocuments(String keyword, int pageNo, int pageSize);
 
 	void deleteDocument(int id);
 
