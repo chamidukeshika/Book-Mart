@@ -30,7 +30,7 @@ public class ReadOnline {
 	@Column(length = 255)
 	private String category;
 	
-
+	@Column(length = 255)
 	private String file;
 
 	private String coverImage;
