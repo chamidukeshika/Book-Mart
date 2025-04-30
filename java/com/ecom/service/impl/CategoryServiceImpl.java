@@ -26,18 +26,16 @@ public class CategoryServiceImpl implements CategoryService {
 		return categoryRepository.save(category);
 	}
 
-	
+	@Override
+	public List<Category> getAllCategory() {
+
+		return categoryRepository.findAll();
+	}
 
 	@Override
 	public Boolean existCategory(String name) {
 
 		return categoryRepository.existsByName(name);
-	}
-
-	@Override
-	public List<Category> getAllCategory() {
-
-		return categoryRepository.findAll();
 	}
 
 	@Override
