@@ -56,7 +56,7 @@ public class UserController {
 	public String home() {
 
 		return "user/home";
-		
+
 		
 	}
 
@@ -64,12 +64,14 @@ public class UserController {
 	public void getUserDetails(Principal p, Model m) {
 
 		if (p != null) {
+			
 
 			String email = p.getName();
 			UserDtls userDtls = userService.getUserByEmail(email);
 			m.addAttribute("user", userDtls);
 			Integer countCart = cartService.getCountCart(userDtls.getId());
 			m.addAttribute("countCart", countCart);
+
 
 		}
 		List<Category> allActiveCategory = categoryService.getAllActiveCategory();
