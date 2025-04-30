@@ -52,8 +52,11 @@ public class UserController {
 	private CommonUtil commonUtil;
 
 	@GetMapping("/")
+
 	public String home() {
+
 		return "user/home";
+		
 		
 	}
 
