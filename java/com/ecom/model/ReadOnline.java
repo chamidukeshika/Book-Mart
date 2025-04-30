@@ -35,4 +35,9 @@ public class ReadOnline {
 
 	@Column(length = 255)
 	private String coverImage;
+
+	@Override
+	public String toString() {
+    	return "ReadOnline [id=" + id + ", title=" + title + ", category=" + category + "]";
+	}
 }
