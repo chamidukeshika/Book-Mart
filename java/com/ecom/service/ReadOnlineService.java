@@ -8,6 +8,13 @@ import org.springframework.data.domain.Page;
 import com.ecom.model.ReadOnline;
 
 public interface ReadOnlineService {
+
+	/**
+     * Saves a new ReadOnline document.
+     * 
+     * @param doc the document to save
+     * @return the saved document
+     */
 	ReadOnline saveDocument(ReadOnline doc);
 
 	Page<ReadOnline> getAllDocuments(String category, int pageNo, int pageSize);
